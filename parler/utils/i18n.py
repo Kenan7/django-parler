@@ -126,8 +126,9 @@ def get_language():
     Here we patch this behavior e.g. for back-end functionality requiring access to translated fields
     """
     from parler import appsettings
+    from django.core.cache import cache
 
-    language = dj_get_language()
+    language = cache.get('language') or dj_get_language()
     if language is None and appsettings.PARLER_DEFAULT_ACTIVATE:
         return appsettings.PARLER_DEFAULT_LANGUAGE_CODE
     else:

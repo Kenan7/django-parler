@@ -286,16 +286,14 @@ class TranslatableModelMixin:
         # self._state.adding is always True at this point,
         # the QuerySet.iterator() code changes it after construction.
         self._translations_cache = None
-        self._current_language = None
+        self._current_language = normalize_language_code(get_language()) 
 
         # Run original Django model __init__
         super().__init__(*args, **kwargs)
 
         # Assign translated args manually.
         self._translations_cache = defaultdict(dict)
-        self._current_language = normalize_language_code(
-            current_language or get_language()
-        )  # What you used to fetch the object is what you get.
+        self._current_language = normalize_language_code(get_language())  # What you used to fetch the object is what you get.
 
         if translated_kwargs:
             self._set_translated_fields(self._current_language, **translated_kwargs)
